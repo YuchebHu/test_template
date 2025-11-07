@@ -1,4 +1,6 @@
-build/
 .vscode
-.cache/
 .vs/
+.vscode/
+build/
+out/
+.cache/
