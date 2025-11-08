@@ -1,4 +1,5 @@
 cmake_minimum_required(VERSION 3.10.0)
+cmake_policy(SET CMP0091 NEW)
 project(TestTemplate VERSION 0.1.0 LANGUAGES C CXX)
 
 set(CMAKE_CXX_STANDARD 17)
@@ -9,7 +10,7 @@ include(cmake/conf.cmake)
 
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
-add_subdirectory(extern )
+add_subdirectory(extern EXCLUDE_FROM_ALL)
 
 add_executable(TestTemplate main.cpp test_simple.cpp)
 add_executable(cppTest main.cpp)
