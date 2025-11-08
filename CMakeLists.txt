@@ -6,21 +6,17 @@ set(CMAKE_CXX_STANDARD 17)
 set(CMAKE_CXX_STANDARD_REQUIRED ON)
 set(CMAKE_CXX_EXTENSIONS OFF)
 
-include(cmake/conf.cmake)
-
+if (NOT WIN32)
+  include(cmake/conf.cmake)
+endif()
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
+enable_testing()
+
 add_subdirectory(extern EXCLUDE_FROM_ALL)
+add_subdirectory(tests)
 
 add_executable(TestTemplate main.cpp test_simple.cpp)
-add_executable(cppTest main.cpp)
 
-add_executable(google_test)
-target_sources(google_test PRIVATE google_test.cpp)
-target_link_libraries(google_test PRIVATE GTest::gtest_main)
-
-enable_testing()
-include(googletest)
-gtest_discover_tests(google_test)
 
 
