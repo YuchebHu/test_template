@@ -17,9 +17,9 @@ option(BUILD_SHARED_LIBS "Build shared libraries" OFF)
 enable_testing()
 
 add_subdirectory(extern EXCLUDE_FROM_ALL)
-add_subdirectory(tests)
-
+add_subdirectory(learning)
 add_executable(TestTemplate main.cpp test_simple.cpp)
 
+add_subdirectory(tests)
 
 
