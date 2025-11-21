@@ -24,11 +24,10 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     Coverage
     DEPENDS ${CMAKE_BINARY_DIR}/coverage_report RunForCoverage
     COMMAND
-      gcovr -r ${CMAKE_SOURCE_DIR} ${GCOV_COMMAND} --exclude  ".*/extern/.*"
+      gcovr -r ${CMAKE_SOURCE_DIR} ${GCOV_COMMAND} --exclude ".*/extern/.*"
       --html-details -o ${CMAKE_BINARY_DIR}/coverage_report/index.html --lcov
       ${CMAKE_BINARY_DIR}/coverage_report/lcov.info
     WORKING_DIRECTORY ${CMAKE_BINARY_DIR}
-    VERBATIM
-    )
+    VERBATIM)
 
 endif()
