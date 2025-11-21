@@ -7,6 +7,13 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     COMMAND $<TARGET_FILE:${PROJECT_NAME}>
     DEPENDS ${PROJECT_NAME}
     COMMENT "Running program to generate coverage data")
+
+  add_custom_command(
+    OUTPUT ${CMAKE_BINARY_DIR}/coverage_report
+    COMMAND ${CMAKE_COMMAND} -E make_directory
+            ${CMAKE_BINARY_DIR}/coverage_report
+    COMMENT "Creating coverage report directory")
+
   set(GCOV_TOOL_ARGS "")
   set(GCOV_COMMAND "")
   if(CMAKE_CXX_COMPILER_ID STREQUAL "Clang")
@@ -15,21 +22,17 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
       message(STATUS "GCOV_TOOL_ARGS: ${GCOV_TOOL_ARGS}")
       set(GCOV_TOOL_ARGS "--gcov-tool"
                          "${CMAKE_SOURCE_DIR}/scripts/llvm-gcov.sh")
-      add_custom_command(
-        OUTPUT ${CMAKE_BINARY_DIR}/lcov_report
-        COMMAND ${CMAKE_COMMAND} -E make_directory
-                ${CMAKE_BINARY_DIR}/lcov_report
-        COMMENT "Creating coverage report directory")
+
       add_custom_target(
         Coverage
-        DEPENDS ${CMAKE_BINARY_DIR}/lcov_report RunForCoverage
+        DEPENDS ${CMAKE_BINARY_DIR}/coverage_report RunForCoverage
         COMMAND
           lcov -c -d ${CMAKE_SOURCE_DIR} -b ${CMAKE_SOURCE_DIR} -o
-          ${CMAKE_BINARY_DIR}/lcov_report/coverage.info ${GCOV_TOOL_ARGS}
+          ${CMAKE_BINARY_DIR}/coverage_report/coverage.info ${GCOV_TOOL_ARGS}
           --no-external
         COMMAND
-          genhtml ${CMAKE_BINARY_DIR}/lcov_report/coverage.info -o
-          ${CMAKE_BINARY_DIR}/lcov_report --show-details --legend
+          genhtml ${CMAKE_BINARY_DIR}/coverage_report/coverage.info -o
+          ${CMAKE_BINARY_DIR}/coverage_report --show-details --legend
           --branch-coverage)
       add_custom_target(
         CleanCoverage
@@ -43,16 +46,12 @@ if(CMAKE_BUILD_TYPE STREQUAL "Debug")
     endif()
   endif()
 
-  add_custom_command(
-    OUTPUT ${CMAKE_BINARY_DIR}/gcovr_report
-    COMMAND ${CMAKE_COMMAND} -E make_directory ${CMAKE_BINARY_DIR}/gcovr_report
-    COMMENT "Creating coverage report directory")
   add_custom_target(
     Coverage_Gcovr
-    DEPENDS ${CMAKE_BINARY_DIR}/gcovr_report RunForCoverage
+    DEPENDS ${CMAKE_BINARY_DIR}/coverage_report RunForCoverage
     COMMAND
       gcovr -r ${CMAKE_SOURCE_DIR} ${GCOV_COMMAND} --exclude "(.*/)*extern"
-      --html-details -o ${CMAKE_BINARY_DIR}/gcovr_report/index.html --lcov
-      ${CMAKE_BINARY_DIR}/gcovr_report/lcov.info)
+      --html-details -o ${CMAKE_BINARY_DIR}/coverage_report/index.html --lcov
+      ${CMAKE_BINARY_DIR}/coverage_report/lcov.info)
 
 endif()

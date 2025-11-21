@@ -16,6 +16,7 @@
 - **cmake** (3.10 或更高版本)
 - **gcc** **g++** (支持 gcov)
 - **lcov** (覆盖率报告生成)
+- **gcovr**
 - **llvm clang** (包括 libclang-rt 和 llvm-cov)
 
 ### 安装依赖
@@ -24,6 +25,15 @@
 ```bash
 sudo apt update
 sudo apt install cmake gcc g++ lcov clang llvm libclang-rt-dev
+```
+
+#### Windows
+```powershell
+pip install gcovr
+```
+
+```msys2 bash
+pacman -S gcc cmake g++ lcov clang llvm libclang-rt
 ```
 
 
@@ -42,12 +52,13 @@ make
 
 ### 3. 运行测试并生成覆盖率报告
 ```bash
-make Coverage
+make Coverage // For Linux
+make Coverage_Gcovr // For Windows
 ```
 
 ### 4. 查看覆盖率报告
 ```bash
-python -m http.server -d build/lcov_report
+python -m http.server -d build/coverage_report
 ```
 然后在浏览器中访问 `http://localhost:8000` 查看详细的覆盖率报告。
 
@@ -56,20 +67,9 @@ python -m http.server -d build/lcov_report
 ### 主要目标
 - **`${PROJECT_NAME}`** - 构建主项目
 - **`RunForCoverage`** - 运行程序生成覆盖率数据
-- **`Coverage`** - 生成完整的 HTML 覆盖率报告
+- **`Coverage`** - Linux 平台下生成完整的 HTML 覆盖率报告
+- **`Coverage_Gcovr`** - Window 平台下生成完整的 HTML 覆盖率报告
 - **`CleanCoverage`** - 清理覆盖率报告和数据文件
-
-### 使用示例
-```bash
-# 生成覆盖率报告
-make Coverage
-
-# 仅运行测试（不生成报告）
-make RunForCoverage
-
-# 清理覆盖率数据
-make CleanCoverage
-```
 
 ## 覆盖率报告内容
 
